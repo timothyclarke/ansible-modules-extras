@@ -93,7 +93,6 @@ options:
       - delay (in seconds) before disabling server or service
     required: false
     default: 1800
-    choices: Any posative integer number
     aliases: []
     version_added: "2.2"
 
