@@ -80,6 +80,20 @@ options:
     required: false
     default: 'yes'
     choices: ['yes', 'no']
+  graceful:
+    description:
+      - gracefully expire sessions before disabling server or service
+    required: false
+    default: YES
+    choices: ["YES", "NO"]
+    aliases: []
+  delay:
+    description:
+      - delay (in seconds) before disabling server or service
+    required: false
+    default: 1800
+    choices: Any posative integer number
+    aliases: []
 
 requirements: []
 author: "Nandor Sivok (@dominis)"
@@ -126,13 +140,18 @@ class netscaler(object):
         return json.load(response)
 
     def prepare_request(self, action):
+        if action == 'disable':
+          self._type_params = {"name": self._name, "delay": self._delay, "graceful": self._graceful}
+        else:
+          self._type_params = {"name": self._name}
+
         resp = self.http_request(
             'config',
             {
                 "object":
                 {
                     "params": {"action": action},
-                    self._type: {"name": self._name}
+                    self._type: self._type_params
                 }
             }
         )
@@ -148,6 +167,8 @@ def core(module):
     n._nsc_protocol = module.params.get('nsc_protocol')
     n._name = module.params.get('name')
     n._type = module.params.get('type')
+    n._delay = module.params.get('delay')
+    n._graceful = module.params.get('graceful')
     action = module.params.get('action')
 
     r = n.prepare_request(action)
@@ -167,6 +188,8 @@ def main():
             name = dict(default=socket.gethostname()),
             type = dict(default='server', choices=['service', 'server']),
             validate_certs=dict(default='yes', type='bool'),
+            delay = dict(default='1800', type='int'),
+            graceful = dict(default='YES', choices=['YES', 'NO']),
         )
     )
 
