@@ -87,6 +87,7 @@ options:
     default: YES
     choices: ["YES", "NO"]
     aliases: []
+    version_added: "2.2"
   delay:
     description:
       - delay (in seconds) before disabling server or service
@@ -94,20 +95,21 @@ options:
     default: 1800
     choices: Any posative integer number
     aliases: []
+    version_added: "2.2"
 
 requirements: []
 author: "Nandor Sivok (@dominis)"
 '''
 
 EXAMPLES = '''
-# Disable the server
+# Disable the server (gracefully with up to 30 mins delay)
 ansible host -m netscaler -a "nsc_host=nsc.example.com user=apiuser password=apipass"
 
 # Enable the server
 ansible host -m netscaler -a "nsc_host=nsc.example.com user=apiuser password=apipass action=enable"
 
-# Disable the service local:8080
-ansible host -m netscaler -a "nsc_host=nsc.example.com user=apiuser password=apipass name=local:8080 type=service action=disable"
+# Disable the service local:8080 immediately
+ansible host -m netscaler -a "nsc_host=nsc.example.com user=apiuser password=apipass name=local:8080 type=service action=disable delay=0 graceful=NO"
 '''
 
 
