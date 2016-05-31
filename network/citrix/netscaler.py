@@ -85,15 +85,13 @@ options:
       - gracefully expire sessions before disabling server or service
     required: false
     default: YES
-    choices: ["YES", "NO"]
-    aliases: []
+    choices: ['YES', 'yes', 'NO', 'no']
     version_added: "2.2"
   delay:
     description:
       - delay (in seconds) before disabling server or service
     required: false
     default: 1800
-    aliases: []
     version_added: "2.2"
 
 requirements: []
@@ -190,7 +188,7 @@ def main():
             type = dict(default='server', choices=['service', 'server']),
             validate_certs=dict(default='yes', type='bool'),
             delay = dict(default='1800', type='int'),
-            graceful = dict(default='YES', choices=['YES', 'NO']),
+            graceful = dict(default='YES', choices=['YES', 'yes', 'NO', 'no']),
         )
     )
 
