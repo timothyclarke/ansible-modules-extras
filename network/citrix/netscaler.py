@@ -122,6 +122,7 @@ class netscaler(object):
         self.module = module
 
     def http_request(self, api_endpoint, data_json={}):
+        _return_content = {}
         request_url = self._nsc_protocol + '://' + self._nsc_host + self._nitro_base_url + api_endpoint
 
         data_json = urllib.urlencode(data_json)
@@ -136,7 +137,13 @@ class netscaler(object):
 
         response, info = fetch_url(self.module, request_url, data=data_json, headers=headers)
 
-        return json.load(response)
+        if response is None:
+          _return_content = info
+          _return_content['errorcode'] = "No response from Netscaler, see msg for detail"
+        else:
+          _return_content = json.load(response)
+
+        return _return_content
 
     def prepare_request(self, action):
         if action == 'disable':
