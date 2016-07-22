@@ -150,7 +150,6 @@ class netscaler(object):
           self._type_params = {"name": self._name, "delay": self._delay, "graceful": self._graceful}
         else:
           self._type_params = {"name": self._name}
-
         resp = self.http_request(
             'config',
             {
